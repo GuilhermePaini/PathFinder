@@ -21,7 +21,12 @@ namespace AmazoniaServices.Controllers
         [HttpGet("{startingPosition}/{objectPosition}/{deliveryPoint}")]
         public async Task<IActionResult> Get(string startingPosition, string objectPosition, string deliveryPoint) 
         {
-            var droneRoute = new DroneRouteRequest(startingPosition, objectPosition, deliveryPoint);
+            var droneRoute = new DroneRouteRequest(
+                startingPosition.ToUpper(),
+                objectPosition.ToUpper(),
+                deliveryPoint.ToUpper()
+            );
+
             try
             {
                 _logger.LogInformation("Request received: {request}", JsonConvert.SerializeObject(droneRoute));
