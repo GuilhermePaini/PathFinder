@@ -23,9 +23,15 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <!-- -->
 
+  <!-- Google fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body data-bs-theme="dark">
@@ -38,16 +44,24 @@
           Drone - Route calculator
         </a>
         <div class="d-flex">
-          <span v-if="serviceStatus" title="Service is Healthy!">✅</span>
-          <span v-else title="Service is unavailable!">❗</span>
+          <span v-if="serviceStatus" title="Service is Healthy!">
+            <i class="fa-solid fa-square-check" style="color: #16C60C;"></i>
+          </span>
+          <span v-else title="Service is unavailable!">
+            <i class="fa-solid fa-triangle-exclamation" style="color: #BB2D3B;"></i>
+          </span>
         </div>
       </div>
     </nav>
-    
+
     <div class="container p-4 d-flex flex-column align-items-center">
       <div class="row align-items-center input-group mb-3">
+
         <div class="col-3">
-          <label for="inputPassword6" class="col-form-label">▶️ Starting Point: </label>
+          <label for="inputPassword6" class="col-form-label">
+            <i class="fa-solid fa-play" style="color: #16C60C;"></i>
+            Starting point:
+          </label>
         </div>
         <div class="col-9">
           <input type="text" class="form-control text-uppercase" maxlength="2" aria-label="Sizing example input"
@@ -56,7 +70,10 @@
       </div>
       <div class="row align-items-center input-group mb-3">
         <div class="col-3">
-          <label for="inputPassword6" class="col-form-label">📦 Object pick-up: </label>
+          <label for="inputPassword6" class="col-form-label">
+            <i class="fa-solid fa-box" style="color: #FAB005;"></i> 
+            Object pick-up: 
+          </label>
         </div>
         <div class="col-9">
           <input type="text" class="form-control text-uppercase" maxlength="2" aria-label="Sizing example input"
@@ -65,23 +82,34 @@
       </div>
       <div class="row align-items-center input-group mb-3">
         <div class="col-3">
-          <label for="inputPassword6" class="col-form-label">📬 Delivery point: </label>
+          <label for="inputPassword6" class="col-form-label">
+            <i class="fa-solid fa-envelope" style="color: #EA2C49;"></i>
+            Delivery point: </label>
         </div>
         <div class="col-9">
           <input type="text" class="form-control text-uppercase" maxlength="2" aria-label="Sizing example input"
             aria-describedby="inputGroup-sizing-default" v-model="deliveryPoint">
         </div>
       </div>
-      <button class="btn btn-secondary" @click="fetchApi()" :disabled="!enableSubmit">Calculate Route</button>
+      
+      <button class="btn btn-secondary" @click="fetchApi()" :disabled="!enableSubmit || loadingRoute">
+        <span class="spinner-border spinner-border-sm" aria-hidden="true" v-if="loadingRoute"></span>
+        <span role="status"> Calculate Route</span>
+      </button>
 
-      <div class="col-12 mt-3 alert alert-secondary alert-dismissible fade show" role="alert"
-        v-show="pathFinderReponse.length > 0">
+      <div class="col-12 mt-3 alert alert-secondary fade show" role="alert" v-show="pathFinderReponse.length > 0">
         <p>{{ pathFinderReponse }}</p>
         Will take <b>{{ secondstToTraverseRoute }}</b> seconds to be delivered as fast as possible!
       </div>
       <div class="col-12 mt-3 alert alert-danger alert-dismissible fade show" role="alert"
         v-show="pathFinderError.length > 0">
         {{ pathFinderError }}
+      </div>
+      <div class="col-12 mt-3 alert alert-secondary fade show" role="alert" v-show="calculatorHistory.length > 0">
+        <b>Last deliveries:</b>
+        <p v-for="delivery in calculatorHistory">
+          {{ delivery }}
+        </p>
       </div>
     </div>
   </div>
@@ -95,13 +123,19 @@
   const app = createApp({
     setup() {
 
+      axios.defaults.baseURL = 'https://pathfinder20231015180145.azurewebsites.net/';
+
       const startingPosition = ref('')
       const objectPosition = ref('')
       const deliveryPoint = ref('')
 
+      const loadingRoute = ref(false)
+
+      const secondstToTraverseRoute = ref('')
       const pathFinderReponse = ref('')
       const pathFinderError = ref('')
-      const secondstToTraverseRoute = ref('')
+
+      const calculatorHistory = ref([])
 
       const serviceStatus = ref(false)
 
@@ -110,22 +144,27 @@
         && objectPosition.value.length > 0
         && deliveryPoint.value.length > 0
       )
-      
+
       //fetch on HealthCheck endpoint to check if the application is running 
-      axios.get('https://localhost:7110/status')
+      axios.get('status')
         .then((res) => serviceStatus.value = true)
         .catch((error) => serviceStatus.value = false)
 
       const fetchApi = () => {
         pathFinderError.value = '';
-        axios.get(`https://localhost:7110/PathFinder/${startingPosition.value}/${objectPosition.value}/${deliveryPoint.value}`)
+        loadingRoute.value = true;
+        axios.get(`PathFinder/${startingPosition.value}/${objectPosition.value}/${deliveryPoint.value}`)
           .then((res) => {
-            pathFinderReponse.value = res.data.routeSteps.map((x) => {
-              return `${x.source} -> ${x.target}`
-            }).join(', ');
+            pathFinderReponse.value = res.data.routeSteps.map((x) => `${x.source} -> ${x.target}`).join(', ');
             secondstToTraverseRoute.value = res.data.secondstToTraverseRoute;
+            
+            if(calculatorHistory.value.length > 10)
+              calculatorHistory.value.pop()
+
+            calculatorHistory.value.unshift(`From ${startingPosition.value}, picking-up at ${objectPosition.value} to ${deliveryPoint.value} in ${secondstToTraverseRoute.value}`)
           })
           .catch((error) => pathFinderError.value = error.response.data)
+          .finally(() => loadingRoute.value = false);
       }
 
       return {
@@ -137,6 +176,8 @@
         pathFinderReponse,
         pathFinderError,
         secondstToTraverseRoute,
+        calculatorHistory,
+        loadingRoute,
         fetchApi,
       }
     }
