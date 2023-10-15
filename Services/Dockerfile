@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["AmazoniaServices.csproj", "."]
-RUN dotnet restore "./AmazoniaServices.csproj"
+COPY ["PathFinder.csproj", "."]
+RUN dotnet restore "./PathFinder.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "AmazoniaServices.csproj" -c Release -o /app/build
+RUN dotnet build "PathFinder.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "AmazoniaServices.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "PathFinder.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "AmazoniaServices.dll"]
+ENTRYPOINT ["dotnet", "PathFinder.dll"]
