@@ -17,7 +17,7 @@ namespace PathFinder.Services.Impl
             var startingPointToObject = graph.Dijkstra(droneRoute.StartingPosition, droneRoute.ObjectPosition);
             var objectToDeliveryPoint = graph.Dijkstra(droneRoute.ObjectPosition, droneRoute.DeliveryPoint);
             var shortestPath = startingPointToObject.Concat(objectToDeliveryPoint).ToList();
-            var secondsToTraverseRoute = shortestPath.Sum(x => graph.EdgeWeights[x]);
+            var secondsToTraverseRoute = Math.Round(shortestPath.Sum(x => graph.EdgeWeights[x]), 2, MidpointRounding.AwayFromZero);
 
             return new PathResponse(shortestPath, secondsToTraverseRoute);
         }
