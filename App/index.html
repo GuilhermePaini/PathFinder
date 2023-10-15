@@ -41,7 +41,9 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
           <img src="public/logo.png" alt="logo" style="width: 100px;">
-          Drone - Route calculator
+          <p class="d-none d-sm-inline">
+            Drone - Route calculator
+          </p>
         </a>
         <div class="d-flex">
           <span v-if="serviceStatus" title="Service is Healthy!">
@@ -55,41 +57,41 @@
     </nav>
 
     <div class="container p-4 d-flex flex-column align-items-center">
-      
+
       <div class="row align-items-center input-group mb-3">
         <p>Coordinates of a chessboard by letters on the horizontal axis (A to H) and numbers on the vertical axis (1 to 8). </p>
-        <div class="col-3">
+        <div class="col-md-3 col-sm-12">
           <label for="inputPassword6" class="col-form-label">
             <i class="fa-solid fa-play" style="color: #16C60C;"></i>
             Starting point:
           </label>
         </div>
-        <div class="col-9">
+        <div class="col-md-9 col-sm-12">
           <input type="text" class="form-control text-uppercase" maxlength="2" placeholder="A1" aria-label="Sizing example input"
             aria-describedby="inputGroup-sizing-default" v-model="startingPosition">
         </div>
       </div>
 
       <div class="row align-items-center input-group mb-3">
-        <div class="col-3">
+        <div class="col-md-3 col-sm-12">
           <label for="inputPassword6" class="col-form-label">
             <i class="fa-solid fa-box" style="color: #FAB005;"></i> 
             Object pick-up: 
           </label>
         </div>
-        <div class="col-9">
+        <div class="col-md-9 col-sm-12">
           <input type="text" class="form-control text-uppercase" maxlength="2" placeholder="B2" aria-label="Sizing example input"
             aria-describedby="inputGroup-sizing-default" v-model="objectPosition">
         </div>
       </div>
 
       <div class="row align-items-center input-group mb-3">
-        <div class="col-3">
+        <div class="col-md-3 col-sm-12">
           <label for="inputPassword6" class="col-form-label">
             <i class="fa-solid fa-envelope" style="color: #EA2C49;"></i>
             Delivery point: </label>
         </div>
-        <div class="col-9">
+        <div class="col-md-9 col-sm-12">
           <input type="text" class="form-control text-uppercase" maxlength="2" placeholder="C3" aria-label="Sizing example input"
             aria-describedby="inputGroup-sizing-default" v-model="deliveryPoint">
         </div>
