@@ -15,7 +15,7 @@ The challenge is based on building, within 1 week, <b>a modern web application, 
 
 All these positions should be informed as if they were coordinates of a chessboard by letters on the horizontal axis (A to H) and numbers on the vertical axis (1 to 8).
 
-![image](https://github.com/GuilhermePaini/PathFinder/assets/39093362/82089bb3-78ea-4fd6-8403-ae7f0ee067e7) On the left, as an example, we have the starting point at A1, a object at G4 and the destination at F8.
+![image](https://github.com/GuilhermePaini/PathFinder/blob/main/assets/chesboard.png) On the left, as an example, we have the starting point at A1, a object at G4 and the destination at F8.
 
 You can find more information about the chalenge [here]([https://website-name.com](https://communication-assets.gupy.io/production/companies/44084/emails/1695905757142/9ff97070-9cbd-11ed-b349-6b03aae20a37/engineering_tech_assessment_2023_en.pdf)https://communication-assets.gupy.io/production/companies/44084/emails/1695905757142/9ff97070-9cbd-11ed-b349-6b03aae20a37/engineering_tech_assessment_2023_en.pdf)!
 
@@ -27,5 +27,5 @@ I hosted both solutions on Azure, link below:
 - https://nice-flower-00e47b210.3.azurestaticapps.net/
 
 <p align="center">
-  <img src="https://github.com/GuilhermePaini/PathFinder/assets/39093362/f384f275-526f-4a12-8b0b-09ec7fb55b35" alt="drawing" width="500"/>
+  <img src="https://github.com/GuilhermePaini/PathFinder/blob/main/assets/app.png" alt="drawing" width="500"/>
 </p>
